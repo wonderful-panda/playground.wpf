@@ -1,0 +1,177 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:l="clr-namespace:Playground.Controls">
+    <!--
+    固定列のGridViewHeaderRowPresenterとGridViewRowPresenterに設定されるStyle
+    ScrollViewerのスクロールと連動してMarginを変更することによって絶対位置が変わらないようにする
+    -->
+    <Style x:Key="_gvex_frozencol_style_" TargetType="FrameworkElement">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Margin">
+            <Setter.Value>
+                <Binding Path="FrozenColumnsOffset" Mode="OneWay"
+                         RelativeSource="{RelativeSource AncestorType=l:GridViewEx}"
+                         Converter="{x:Static l:Converters.DoubleToThickness}"
+                         ConverterParameter="1,0,0,0" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Width">
+            <Setter.Value>
+                <Binding Path="FrozenColumnsTotalWidth" Mode="OneWay"
+                         RelativeSource="{RelativeSource AncestorType=l:GridViewEx}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--
+    スクロール可能列のGridViewHeaderRowPresenterとGridViewRowPresenterに設定されるStyle
+    ScrollViewerのHorizontalOffsetが0の時に固定列の右側に接する位置にくるようにMarginを設定する
+    また、固定列の領域上に描画が重ならないようにClip Rectangleを設定する
+    -->
+    <Style x:Key="_gvex_normalcol_style_" TargetType="FrameworkElement">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Margin">
+            <Setter.Value>
+                <Binding Path="FrozenColumnsTotalWidth" Mode="OneWay"
+                         RelativeSource="{RelativeSource AncestorType=l:GridViewEx}"
+                         Converter="{x:Static l:Converters.DoubleToThickness}"
+                         ConverterParameter="1,0,0,0" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Clip">
+            <Setter.Value>
+                <RectangleGeometry>
+                    <RectangleGeometry.Rect>
+                        <MultiBinding Converter="{x:Static l:Converters.DoublesToRect}">
+                            <Binding Path="FrozenColumnsOffset" Mode="OneWay"
+                                     RelativeSource="{RelativeSource AncestorType=l:GridViewEx}" />
+                            <Binding Source="0" />
+                            <Binding Path="ActualWidth" Mode="OneWay"
+                                     RelativeSource="{RelativeSource AncestorType=FrameworkElement}" />
+                            <Binding Path="ActualHeight" Mode="OneWay"
+                                     RelativeSource="{RelativeSource AncestorType=FrameworkElement}" />
+                        </MultiBinding>
+                    </RectangleGeometry.Rect>
+                </RectangleGeometry>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--
+    ListBoxItemに適用されるStyle
+    -->
+    <Style x:Key="_gvex_item_style_" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid Background="{TemplateBinding Background}">
+
+                        <Border Panel.ZIndex="2"
+                                BorderThickness="0,0,1,0" BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
+                                Style="{StaticResource _gvex_frozencol_style_}">
+                            <GridViewRowPresenter
+                                Columns="{Binding FrozenColumns, 
+                                                  RelativeSource={RelativeSource AncestorType=l:GridViewEx}}" />
+                        </Border>
+
+                        <GridViewRowPresenter Panel.ZIndex="1"
+                            Style="{StaticResource _gvex_normalcol_style_}"
+                            Columns="{Binding NormalColumns, 
+                                              RelativeSource={RelativeSource AncestorType=l:GridViewEx}}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Selector.IsSelected" Value="True">
+                            <Setter Property="Control.Background">
+                                <Setter.Value>
+                                    <DynamicResource ResourceKey="{x:Static SystemColors.HighlightBrushKey}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="TextElement.Foreground">
+                                <Setter.Value>
+                                    <DynamicResource ResourceKey="{x:Static SystemColors.HighlightTextBrushKey}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelected" Value="True" />
+                                <Condition Property="Selector.IsSelectionActive" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Control.Background">
+                                <Setter.Value>
+                                    <DynamicResource ResourceKey="{x:Static SystemColors.ControlBrushKey}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="TextElement.Foreground">
+                                <Setter.Value>
+                                    <DynamicResource ResourceKey="{x:Static SystemColors.ControlTextBrushKey}" />
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="TextElement.Foreground">
+                                <Setter.Value>
+                                    <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--
+    GridViewExのDefault Style
+    -->
+    <Style TargetType="{x:Type l:GridViewEx}">
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type l:GridViewEx}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer Name="PART_ScrollViewer"
+                                        Padding="{TemplateBinding Padding}"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        VerticalScrollBarVisibility="Auto"
+                                        Focusable="False">
+                            <Grid>
+                                <Grid Name="_header_" Panel.ZIndex="2" VerticalAlignment="Top"
+                                      Margin="{Binding VerticalOffset, ElementName=PART_ScrollViewer,
+                                                       Converter={x:Static l:Converters.DoubleToThickness},
+                                                       ConverterParameter='0,1,0,0'}">
+                                    <GridViewHeaderRowPresenter Panel.ZIndex="2" Focusable="False"
+                                            Style="{StaticResource _gvex_frozencol_style_}"
+                                            Columns="{TemplateBinding FrozenColumns}"
+                                                                />
+
+                                    <GridViewHeaderRowPresenter Panel.ZIndex="1" Focusable="False"
+                                            Style="{StaticResource _gvex_normalcol_style_}"
+                                            Columns="{TemplateBinding NormalColumns}"
+                                                                />
+                                </Grid>
+                                <ItemsPresenter Panel.ZIndex="1" 
+                                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                Margin="{Binding ActualHeight, ElementName=_header_, Mode=OneWay,
+                                                                 Converter={x:Static l:Converters.DoubleToThickness},
+                                                                 ConverterParameter='0,1,0,0'}"
+                                />
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource _gvex_item_style_}" />
+    </Style>
+</ResourceDictionary>
