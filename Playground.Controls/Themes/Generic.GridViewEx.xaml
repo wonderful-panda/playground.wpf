@@ -140,7 +140,7 @@
                                         Focusable="False">
                             <Grid>
                                 <Grid Name="_header_" Panel.ZIndex="2" VerticalAlignment="Top"
-                                      Margin="{Binding VerticalOffset, ElementName=PART_ScrollViewer,
+                                      Margin="{TemplateBinding VerticalScrollOffset,
                                                        Converter={x:Static l:Converters.DoubleToThickness},
                                                        ConverterParameter='0,1,0,0'}">
                                     <GridViewHeaderRowPresenter Panel.ZIndex="2" Focusable="False"

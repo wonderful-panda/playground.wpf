@@ -127,12 +127,28 @@ namespace Playground.Controls
         
         #endregion
 
+        #region VerticalScrollOffset (ReadOnly)
+        
+        public double VerticalScrollOffset
+        {
+            get { return (double)GetValue(VerticalScrollOffsetProperty); }
+            protected set { SetValue(_VerticalScrollOffsetPropertyKey, value); }
+        }
+
+        private static readonly DependencyPropertyKey _VerticalScrollOffsetPropertyKey =
+            DependencyProperty.RegisterReadOnly("VerticalScrollOffset", typeof(double), typeof(GridViewEx),
+                                                new PropertyMetadata(0.0));
+        public static readonly DependencyProperty VerticalScrollOffsetProperty = _VerticalScrollOffsetPropertyKey.DependencyProperty;
+        
+        #endregion
+
         private void CalculateOffsets()
         {
             var frozenWidth = this.FrozenColumns.Sum(col => col.ActualWidth + 1);
             this.FrozenColumnsTotalWidth = frozenWidth;
             if (_scrollViewer != null)
             {
+                this.VerticalScrollOffset = _scrollViewer.VerticalOffset;
                 var hOffset = _scrollViewer.HorizontalOffset;
                 var viewWidth = _scrollViewer.ViewportWidth;
                 if (frozenWidth < viewWidth)
@@ -144,6 +160,7 @@ namespace Playground.Controls
             }
             else
             {
+                this.VerticalScrollOffset = 0;
                 this.FrozenColumnsOffset = 0;
             }
         }
@@ -167,8 +184,7 @@ namespace Playground.Controls
 
         void _scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            if (e.HorizontalChange != 0)
-                this.CalculateOffsets();
+            this.CalculateOffsets();
         }
     }
 }
