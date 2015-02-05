@@ -127,28 +127,27 @@ namespace Playground.Controls
         
         #endregion
 
-        #region VerticalScrollOffset (ReadOnly)
+        #region HorizontalScrollOffset (ReadOnly)
         
-        public double VerticalScrollOffset
+        public double HorizontalScrollOffset
         {
-            get { return (double)GetValue(VerticalScrollOffsetProperty); }
-            protected set { SetValue(_VerticalScrollOffsetPropertyKey, value); }
+            get { return (double)GetValue(HorizontalScrollOffsetProperty); }
+            protected set { SetValue(_HorizontalScrollOffsetPropertyKey, value); }
         }
 
-        private static readonly DependencyPropertyKey _VerticalScrollOffsetPropertyKey =
-            DependencyProperty.RegisterReadOnly("VerticalScrollOffset", typeof(double), typeof(GridViewEx),
+        private static readonly DependencyPropertyKey _HorizontalScrollOffsetPropertyKey =
+            DependencyProperty.RegisterReadOnly("HorizontalScrollOffset", typeof(double), typeof(GridViewEx),
                                                 new PropertyMetadata(0.0));
-        public static readonly DependencyProperty VerticalScrollOffsetProperty = _VerticalScrollOffsetPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty HorizontalScrollOffsetProperty = _HorizontalScrollOffsetPropertyKey.DependencyProperty;
         
         #endregion
-
         private void CalculateOffsets()
         {
             var frozenWidth = this.FrozenColumns.Sum(col => col.ActualWidth + 1);
             this.FrozenColumnsTotalWidth = frozenWidth;
             if (_scrollViewer != null)
             {
-                this.VerticalScrollOffset = _scrollViewer.VerticalOffset;
+                this.HorizontalScrollOffset = _scrollViewer.HorizontalOffset;
                 var hOffset = _scrollViewer.HorizontalOffset;
                 var viewWidth = _scrollViewer.ViewportWidth;
                 if (frozenWidth < viewWidth)
@@ -160,7 +159,7 @@ namespace Playground.Controls
             }
             else
             {
-                this.VerticalScrollOffset = 0;
+                this.HorizontalScrollOffset = 0;
                 this.FrozenColumnsOffset = 0;
             }
         }

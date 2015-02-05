@@ -133,34 +133,33 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer Name="PART_ScrollViewer"
-                                        Padding="{TemplateBinding Padding}"
-                                        HorizontalScrollBarVisibility="Auto"
-                                        VerticalScrollBarVisibility="Auto"
-                                        Focusable="False">
-                            <Grid>
-                                <Grid Name="_header_" Panel.ZIndex="2" VerticalAlignment="Top"
-                                      Margin="{TemplateBinding VerticalScrollOffset,
-                                                       Converter={x:Static l:Converters.DoubleToThickness},
-                                                       ConverterParameter='0,1,0,0'}">
-                                    <GridViewHeaderRowPresenter Panel.ZIndex="2" Focusable="False"
-                                            Style="{StaticResource _gvex_frozencol_style_}"
-                                            Columns="{TemplateBinding FrozenColumns}"
-                                                                />
-
-                                    <GridViewHeaderRowPresenter Panel.ZIndex="1" Focusable="False"
+                        <Grid Focusable="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Focusable="False" Padding="{TemplateBinding Padding}"
+                                    Margin="{TemplateBinding HorizontalScrollOffset,
+                                                             Converter={x:Static l:Converters.DoubleToThickness},
+                                                             ConverterParameter='-1,0,0,0'}">
+                                <Grid Name="_header_" Panel.ZIndex="2" VerticalAlignment="Top">
+                                    <GridViewHeaderRowPresenter Focusable="False"
                                             Style="{StaticResource _gvex_normalcol_style_}"
-                                            Columns="{TemplateBinding NormalColumns}"
-                                                                />
+                                            Columns="{TemplateBinding NormalColumns}" />
+
+                                    <GridViewHeaderRowPresenter Focusable="False"
+                                            Style="{StaticResource _gvex_frozencol_style_}"
+                                            Columns="{TemplateBinding FrozenColumns}" />
                                 </Grid>
-                                <ItemsPresenter Panel.ZIndex="1" 
-                                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                                Margin="{Binding ActualHeight, ElementName=_header_, Mode=OneWay,
-                                                                 Converter={x:Static l:Converters.DoubleToThickness},
-                                                                 ConverterParameter='0,1,0,0'}"
-                                />
-                            </Grid>
-                        </ScrollViewer>
+                            </Border>
+
+                            <ScrollViewer Name="PART_ScrollViewer"
+                                          Grid.Row="1" Focusable="False" Padding="{TemplateBinding Padding}"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                            </ScrollViewer>
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
