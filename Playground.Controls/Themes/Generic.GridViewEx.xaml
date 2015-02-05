@@ -61,23 +61,24 @@
     ListBoxItemに適用されるStyle
     -->
     <Style x:Key="_gvex_item_style_" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+        <Setter Property="MinHeight" Value="{Binding MinRowHeight, RelativeSource={RelativeSource AncestorType=l:GridViewEx}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
                     <Grid Background="{TemplateBinding Background}">
+                        <GridViewRowPresenter
+                            Style="{StaticResource _gvex_normalcol_style_}"
+                            Columns="{Binding NormalColumns, 
+                                              RelativeSource={RelativeSource AncestorType=l:GridViewEx}}" />
 
-                        <Border Panel.ZIndex="2"
-                                BorderThickness="0,0,1,0" BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
+                        <Border BorderThickness="0,0,1,0" BorderBrush="{x:Static SystemColors.ControlDarkBrush}"
                                 Style="{StaticResource _gvex_frozencol_style_}">
                             <GridViewRowPresenter
                                 Columns="{Binding FrozenColumns, 
                                                   RelativeSource={RelativeSource AncestorType=l:GridViewEx}}" />
                         </Border>
 
-                        <GridViewRowPresenter Panel.ZIndex="1"
-                            Style="{StaticResource _gvex_normalcol_style_}"
-                            Columns="{Binding NormalColumns, 
-                                              RelativeSource={RelativeSource AncestorType=l:GridViewEx}}" />
+
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Selector.IsSelected" Value="True">
@@ -126,6 +127,7 @@
     -->
     <Style TargetType="{x:Type l:GridViewEx}">
         <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
+        <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="Template">
             <Setter.Value>

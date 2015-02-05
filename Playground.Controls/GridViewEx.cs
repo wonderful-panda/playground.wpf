@@ -141,6 +141,27 @@ namespace Playground.Controls
         public static readonly DependencyProperty HorizontalScrollOffsetProperty = _HorizontalScrollOffsetPropertyKey.DependencyProperty;
         
         #endregion
+
+
+        #region MinRowHeight
+        
+        /// <summary>
+        /// 各行の高さの最小値
+        /// </summary>
+        /// <remarks>
+        /// このプロパティを設定しておかないとVirtualizationが有効にならない(要調査)
+        /// </remarks>
+        public double MinRowHeight
+        {
+            get { return (double)GetValue(MinRowHeightProperty); }
+            set { SetValue(MinRowHeightProperty, value); }
+        }
+
+        public static readonly DependencyProperty MinRowHeightProperty =
+            DependencyProperty.Register("MinRowHeight", typeof(double), typeof(GridViewEx), new PropertyMetadata(22.0));
+
+        #endregion
+        
         private void CalculateOffsets()
         {
             var frozenWidth = this.FrozenColumns.Sum(col => col.ActualWidth + 1);
@@ -184,6 +205,15 @@ namespace Playground.Controls
         void _scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             this.CalculateOffsets();
+        }
+
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            // Virtualizationを有効にするために明示的にMinHeightを設定する
+            // (xamlでBindingしただけではVirtualizationがうまく動かなかった。要調査)
+            var container = (ListBoxItem)base.GetContainerForItemOverride();
+            container.MinHeight = this.MinRowHeight;
+            return container;
         }
     }
 }
