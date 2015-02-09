@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Test"
         xmlns:c="clr-namespace:Playground.Controls;assembly=Playground.Controls"
+        xmlns:rd="clr-namespace:Radish;assembly=Radish"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
         <l:MainWindowViewModel x:Key="viewmodel" />
@@ -21,7 +22,9 @@
             <c:GridViewEx.NormalColumns>
                 <GridViewColumnCollection>
                     <GridViewColumn Header="サイズ"
-                                    DisplayMemberBinding="{Binding Size}" />
+                                    DisplayMemberBinding="{Binding Size, 
+                                                            Converter={x:Static rd:PythonConverter.Default},
+                                                            ConverterParameter=str((v+1023)/1024) + \'KB\'}" />
                     <GridViewColumn Header="更新日時"
                                     DisplayMemberBinding="{Binding LastWriteTime, StringFormat='yyyy/MM/dd HH:mm:ss'}"/>
                     <GridViewColumn Header="フォルダ"

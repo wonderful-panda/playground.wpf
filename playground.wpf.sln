@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground.Controls", "Play
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{5CAAF50C-E239-4733-86E2-BEC03EA5F547}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radish", "Radish\Radish.csproj", "{D45F0C2D-CFCC-4AA7-A805-F8E6A84F3D50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5CAAF50C-E239-4733-86E2-BEC03EA5F547}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CAAF50C-E239-4733-86E2-BEC03EA5F547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CAAF50C-E239-4733-86E2-BEC03EA5F547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D45F0C2D-CFCC-4AA7-A805-F8E6A84F3D50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45F0C2D-CFCC-4AA7-A805-F8E6A84F3D50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45F0C2D-CFCC-4AA7-A805-F8E6A84F3D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45F0C2D-CFCC-4AA7-A805-F8E6A84F3D50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
